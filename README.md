@@ -1,5 +1,5 @@
 # Beginner-SLAM-project
-Group project for demonstrating SLAM.
+Group project for demonstrating landmark-based FastSLAM.
 Simulated a robot in the open-source robotic simulation platform Webots with techniques learned from Introduction to Mobile Robotics. 
 link to course: http://ais.informatik.uni-freiburg.de/teaching/ss20/robotics/
 Adopted codes from the tutorials.
