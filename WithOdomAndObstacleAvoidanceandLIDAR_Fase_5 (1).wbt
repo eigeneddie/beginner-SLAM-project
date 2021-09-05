@@ -1,0 +1,285 @@
+#VRML_SIM R2020b utf8
+WorldInfo {
+  coordinateSystem "NUE"
+}
+Viewpoint {
+  orientation -0.3821135805553959 -0.844602216026329 -0.37501507734829737 1.7365014705923936
+  position -3.042793435077327 3.7269755659228245 0.4976807134739428
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 10 10
+}
+Robot {
+  children [
+    DEF Body Transform {
+      translation 0 0.0415 0
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.333333 0.666667 1
+            roughness 1
+            metalness 0
+          }
+          geometry Cylinder {
+            height 0.08
+            radius 0.045
+          }
+        }
+      ]
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        anchor 0.045 0.025 0
+      }
+      device [
+        RotationalMotor {
+          name "motor1"
+        }
+        PositionSensor {
+          name "ps_1"
+          noise 0.1
+        }
+      ]
+      endPoint Solid {
+        translation 0.045 0.025 0
+        rotation 9.813059844099396e-18 0 1 1.5707999999999998
+        children [
+          DEF Wheel Shape {
+            appearance PBRAppearance {
+              roughness 1
+              metalness 0
+            }
+            geometry Cylinder {
+              height 0.01
+              radius 0.025
+            }
+          }
+        ]
+        boundingObject USE Wheel
+        physics DEF Wheel_Physics Physics {
+        }
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        anchor -0.045 0.025 0
+      }
+      device [
+        RotationalMotor {
+          name "motor2"
+        }
+        PositionSensor {
+          name "ps_2"
+          noise 0.1
+        }
+      ]
+      endPoint Solid {
+        translation -0.045 0.025 0
+        rotation -1.9626119688198792e-17 0 1 1.5708
+        children [
+          USE Wheel
+        ]
+        name "solid(1)"
+        boundingObject USE Wheel
+        physics USE Wheel_Physics
+      }
+    }
+    DistanceSensor {
+      translation 0.015 0.07 0.045
+      rotation 0 1 0 0.5
+      children [
+        DEF Distance Shape {
+          appearance PBRAppearance {
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.01 0.01 0.01
+          }
+        }
+      ]
+      name "ds_1"
+    }
+    DistanceSensor {
+      translation -0.015 0.07 0.045
+      rotation 0 1 0 -1
+      children [
+        USE Distance
+      ]
+      name "ds_2"
+    }
+    InertialUnit {
+      name "imu"
+    }
+    DEF LIDAR Lidar {
+      translation 0 0.15 0
+      children [
+        Transform {
+          translation 0 -0.01 0
+          rotation 1 0 0 -1.5708
+          children [
+            DEF Axes Shape {
+              appearance Appearance {
+                material Material {
+                  diffuseColor 0.02 0.02 0.02
+                }
+              }
+              geometry IndexedLineSet {
+                coord Coordinate {
+                  point [
+                    0 0 0.01
+                    0.01 0 -0.08
+                    -0.01 0 -0.08
+                    0 0.01 -0.08
+                    0 -0.01 -0.08
+                  ]
+                }
+                coordIndex [
+                  0, 1, 0, 2, 0, 3, 0, 4
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      rotationStep 0.261798
+      horizontalResolution 256
+      near 0.001
+      minRange 0.001
+      maxRange 4
+      type "rotating"
+      defaultFrequency 5
+      rotatingHead Solid {
+        children [
+          Transform {
+            translation 0 0 0.02
+            children [
+              DEF LENS Shape {
+                appearance PBRAppearance {
+                  baseColor 0 0 0
+                  roughness 1e-16
+                  metalness 0
+                }
+                geometry Sphere {
+                  radius 0.015
+                  subdivision 2
+                }
+              }
+            ]
+          }
+          DEF Camera_Shape Transform {
+            rotation 1 0 0 1.5708
+            children [
+              DEF Camera_Outline Shape {
+                appearance PBRAppearance {
+                  baseColor 0.89039 0.89039 0.89039
+                  roughness 1
+                  metalness 0
+                }
+                geometry Cylinder {
+                  height 0.05
+                  radius 0.024
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+  boundingObject USE Body
+  physics Physics {
+  }
+  controller "SLAM"
+}
+Solid {
+  translation 0.25 0 0.25
+  children [
+    DEF LandmarkTrans Transform {
+      translation 0 0.15 0
+      children [
+        DEF Landmark Shape {
+          appearance PBRAppearance {
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.03 0.3 0.03
+          }
+        }
+      ]
+    }
+  ]
+  boundingObject USE LandmarkTrans
+  physics DEF Landmark_Phy Physics {
+    density -1
+    mass 2
+  }
+}
+Solid {
+  translation 0.4 -3.5083e-14 0.75
+  children [
+    USE LandmarkTrans
+  ]
+  name "solid(1)"
+  boundingObject USE LandmarkTrans
+  physics USE Landmark_Phy
+}
+Solid {
+  translation 0 6.43928e-15 1.5
+  children [
+    USE LandmarkTrans
+  ]
+  name "solid(2)"
+  boundingObject USE LandmarkTrans
+  physics USE Landmark_Phy
+}
+Solid {
+  translation 0.5 6.66121e-16 1.25
+  children [
+    USE LandmarkTrans
+  ]
+  name "solid(3)"
+  boundingObject USE LandmarkTrans
+  physics USE Landmark_Phy
+}
+Solid {
+  translation 0.75 2.22045e-15 1
+  children [
+    USE LandmarkTrans
+  ]
+  name "solid(4)"
+  boundingObject USE LandmarkTrans
+  physics USE Landmark_Phy
+}
+Solid {
+  translation 1 -1.33227e-15 0.7
+  children [
+    USE LandmarkTrans
+  ]
+  name "solid(5)"
+  boundingObject USE LandmarkTrans
+  physics USE Landmark_Phy
+}
+Solid {
+  translation 1 -8.88181e-16 0.32
+  children [
+    USE LandmarkTrans
+  ]
+  name "solid(6)"
+  boundingObject USE LandmarkTrans
+  physics USE Landmark_Phy
+}
+Solid {
+  translation -0.75 -4.44089e-16 0.45
+  children [
+    USE LandmarkTrans
+  ]
+  name "solid(7)"
+  boundingObject USE LandmarkTrans
+  physics USE Landmark_Phy
+}
